@@ -1,5 +1,16 @@
 #include <iostream>
 #include "Game.h"
+#include "Characters.h"
+#include "Enemy.h"
+
+int input_StartMenu = 0;
+int input_TutorialYN = 0;
+int input_Combat = 0;
+
+
+Mage mage;
+Goblin goblin;
+
 
 void Game::Run()
 {
@@ -7,7 +18,6 @@ void Game::Run()
 	//this game is best experienced with fullscreen
 	//timer stop
 
-	int input_StartMenu = 0;
 
 	while (true)
 	{
@@ -15,11 +25,11 @@ void Game::Run()
 		std::cout << "1. Start Game\n";
 		std::cout << "2. Credits\n";
 		std::cout << "3. Exit\n";
-	
+		std::cout << mage.getName() << "\n";
+		std::cout << goblin.getBaseHP() << "\n";
+
 		std::cin >> input_StartMenu;
 		
-		system("cls");
-
 		switch (input_StartMenu)
 		{
 		case 1:
@@ -37,7 +47,6 @@ void Game::Run()
 
 void Game::Start()
 {
-	int input_TutorialYN = 0;
 	while (true)
 	{
 		std::cout << "Text based RPG\n";
@@ -50,6 +59,7 @@ void Game::Start()
 		{
 		case 1:
 			CombatTutorial();
+
 			break;
 		case 2:
 			BeginAdventure();
@@ -69,7 +79,30 @@ void Game::Credits()
 
 void Game::CombatTutorial()
 {
-	std::cout << "";
+	std::cout << "Combat Tutorial\n";
+	while(true)
+	{
+		std::cout << mage.getName() << " : " << mage.getBaseHP();
+		std::cout << "												";
+		std::cout << mage.getName() << " : " << mage.getBaseHP() << "\n";
+
+		std::cout << "1. Moves\n";
+		std::cout << "2. Items\n";
+
+		std::cin >> input_Combat;
+
+		switch (input_Combat)
+		{
+		case 1:
+			
+			break;
+		case 2:
+			
+			break;
+			
+		}
+
+	}
 
 }
 

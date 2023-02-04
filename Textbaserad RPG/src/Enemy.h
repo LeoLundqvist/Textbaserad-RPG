@@ -1,7 +1,8 @@
 #pragma once
 #include <iostream>
 
-class Character
+
+class Enemy
 {
 private:
 	std::string name = "hello";
@@ -18,19 +19,19 @@ public:
 
 };
 
-class Mage : public Character
+class Goblin : public Enemy
 {
 private:
 	//hur ska man accessa?
-	std::string name = "Mage";
-	int baseHP = 2000;
+	std::string name = "Goblin";
+	int baseHP = rand()% 10 + 1;
 	int baseAttackPower = 2;
 	int baseMagicPower = 10;
 	int baseEvadeStat = 1;
-	std::string Attack1name = "Staff slap";
-	std::string Attack2name = "Explosion";
-	std::string Attack3name = "Heal";
-	std::string Attack4name = "Insta Kill(for playtesting)";
+	std::string Attack1name = "Bite";
+	std::string Attack2name = "Rock throw";
+	std::string Attack3name = "Apple";
+	std::string Attack4name = "High Five"; //buff
 
 	//behöver override 
 
@@ -43,17 +44,4 @@ public:
 	{
 		return baseHP;
 	}
-};
-
-class Brawler : public Character
-{
-public:
-
-};
-
-class Tank : public Character
-{
-public:
-
-
 };
