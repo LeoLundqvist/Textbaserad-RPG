@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 
+
+
 class Character
 {
 private:
@@ -93,23 +95,22 @@ public:
 
 	int Attack1()
 	{
-		std::cout << "Player used " << Attack1name << "\n";		
 		//damage räknas ut med vanliga attack + en random från 0 - 3 och sen tar jag minus
 		//då blir damagen mellan baseAttackpower-1 och baseAttackpower+2
 		int damage = baseAttackPower + (rand() % 4) - 1;
-
 		return damage;
 
 	}
 	int Attack2()
 	{
-		std::cout << "Player used " << Attack2name << "\n";
-
+		int damage = baseMagicPower + (rand() % 4) - 1;
+		return damage;
 	}
 
-	int Attack4()
+	void Attack3()
 	{
-		std::cout << "Player used " << Attack4name << "\n";
+		std::cout << "Player used " << Attack4name << " and " << name <<" now has " << currentHP << "\n";
+		
 		currentHP += baseMagicPower;
 
 		if(currentHP > baseHP)
@@ -117,6 +118,12 @@ public:
 			currentHP = baseHP;
 		}
 
+	}
+
+	int Attack4()
+	{
+		int damage = baseMagicPower * 900;
+		return damage;
 	}
 
 	void LevelUp()
