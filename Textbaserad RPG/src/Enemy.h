@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 
-
 class Enemy
 {
 private:
@@ -28,10 +27,16 @@ private:
 	int baseAttackPower = 2;
 	int baseMagicPower = 10;
 	int baseEvadeStat = 1;
+	
+	bool alive = true;
+	int currentHP = baseHP;
+	
 	std::string Attack1name = "Bite";
 	std::string Attack2name = "Rock throw";
 	std::string Attack3name = "Apple";
 	std::string Attack4name = "High Five"; //buff
+
+
 
 	//behöver override 
 
@@ -40,8 +45,25 @@ public:
 	{
 		return name;
 	}
+
 	int getBaseHP()
 	{
 		return baseHP;
 	}
+
+	int getCurrentHP()
+	{
+		return currentHP;
+	}
+
+
+	void takeDamage(int damage)
+	{
+		currentHP -= damage;
+		if (currentHP < 0)
+		{
+			alive = false;
+		}
+	}
+
 };

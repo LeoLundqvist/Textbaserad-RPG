@@ -6,11 +6,13 @@
 int input_StartMenu = 0;
 int input_TutorialYN = 0;
 int input_Combat = 0;
+int input_Move = 0;
 
 
 Mage mage;
 Goblin goblin;
-
+//ändra på eriks sätt
+Enemy enemy;
 
 void Game::Run()
 {
@@ -25,8 +27,6 @@ void Game::Run()
 		std::cout << "1. Start Game\n";
 		std::cout << "2. Credits\n";
 		std::cout << "3. Exit\n";
-		std::cout << mage.getName() << "\n";
-		std::cout << goblin.getBaseHP() << "\n";
 
 		std::cin >> input_StartMenu;
 		
@@ -82,26 +82,50 @@ void Game::CombatTutorial()
 	std::cout << "Combat Tutorial\n";
 	while(true)
 	{
-		std::cout << mage.getName() << " : " << mage.getBaseHP();
+		std::cout << mage.getName() << " : " << mage.getCurrentHP();
 		std::cout << "												";
-		std::cout << mage.getName() << " : " << mage.getBaseHP() << "\n";
+		std::cout << goblin.getName() << " : " << goblin.getCurrentHP() << "\n";
 
 		std::cout << "1. Moves\n";
 		std::cout << "2. Items\n";
 
-		std::cin >> input_Combat;
-
-		switch (input_Combat)
+		//moves eller items
+		while(true)
 		{
-		case 1:
-			
-			break;
-		case 2:
-			
-			break;
-			
+			std::cin >> input_Combat;
+			switch (input_Combat)
+			{
+			case 1:
+				//alla moves
+				std::cout << "1. " << mage.getAttack1Name() << "\n";
+				std::cout << "2. " << mage.getAttack2Name() << "\n";
+				std::cout << "3. " << mage.getAttack3Name() << "\n";
+				std::cout << "4. " << mage.getAttack4Name() << "\n";
+				std::cin >> input_Move;
+
+				switch (input_Move)
+				{
+					case 1:
+						goblin.takeDamage(mage.Attack1());
+						break;
+				}
+				
+
+
+				break;
+			case 2:
+
+				break;
+
+			}
+
 		}
 
+		//enemy hp minus attack
+
+		//efter player attack om enemy = död gg
+		//efter enemy attack om spelare = död bad gg
+		
 	}
 
 }
