@@ -84,12 +84,16 @@ void Game::Credits()
 void Game::CombatTutorial()
 {
 	std::cout << "Combat Tutorial\n";
+	BattleSetup();
 	yourTurn = true;
-	while(true)
+
+	while (true)
 	{
 		std::cout << mage.getName() << " : " << mage.getCurrentHP();
 		std::cout << "												";
 		std::cout << enemy1.getName() << " : " << enemy1.getCurrentHP() << "\n";
+
+		//gör för alla fiender
 
 		//när det är din tur så loopar fighting menyn
 		while (yourTurn == true)
@@ -172,13 +176,15 @@ void Game::CombatTutorial()
 
 			return;
 		}
-
 	}
-
 }
 
 void Game::BeginAdventure()
 {
+	std::cout << "Your party consists of a mage, a abrawler and a tank\n";
+	//directions
+	//map
+
 }
 
 void Game::EnemyAI()
@@ -190,13 +196,24 @@ void Game::BattleSetup()
 {
 	srand(time(NULL));
 	int enemyCount = rand() % 3 + 1;
+
+	srand(time(NULL));
+	int whatEnemy = rand() % 4 + 1;
+
+	//om du möter en fiende
 	enemy2.setExists(false);
 	enemy3.setExists(false);
+
+	//om fienden är besegrad eller inte
+	enemy2.setAlive(false);
+	enemy3.setAlive(false);
+
 
 	//om det är mer än en fiende så betyder det att det är åtminstonde 2 fiender
 	if (enemyCount > 1)
 	{
 		enemy2.setExists(true);
+		
 	}
 	//om det är 3 fiender
 	if (enemyCount == 3)
@@ -205,4 +222,40 @@ void Game::BattleSetup()
 	}
 
 	//enemy1 får värden
+
+	switch (whatEnemy)
+	{
+	case 1:
+		enemy1.setName("Goblin");
+		enemy1.setBaseHP(30);
+		enemy1.setBaseAttackPower(8);
+		enemy1.setBaseMagicPower(8);
+		enemy1.setAlive(true);
+		enemy1.setCurrentHP(enemy1.getBaseHP());
+		break;
+	case 2:
+		enemy1.setName("Skeleton");
+		enemy1.setBaseHP(30);
+		enemy1.setBaseAttackPower(8);
+		enemy1.setBaseMagicPower(8);
+		enemy1.setAlive(true);
+		enemy1.setCurrentHP(enemy1.getBaseHP());
+		break;
+	case 3:
+		enemy1.setName("Witch");
+		enemy1.setBaseHP(30);
+		enemy1.setBaseAttackPower(8);
+		enemy1.setBaseMagicPower(8);
+		enemy1.setAlive(true);
+		enemy1.setCurrentHP(enemy1.getBaseHP());
+		break;
+	case 4:
+		enemy1.setName("Ghoul");
+		enemy1.setBaseHP(30);
+		enemy1.setBaseAttackPower(8);
+		enemy1.setBaseMagicPower(8);
+		enemy1.setAlive(true);
+		enemy1.setCurrentHP(enemy1.getBaseHP());
+		break;
+	}
 }

@@ -1,8 +1,6 @@
 #pragma once
 #include <iostream>
 
-
-
 class Character
 {
 private:
@@ -27,7 +25,7 @@ private:
 
 	//const variabler
 	const std::string name = "Mage";
-	int baseHP = 20;
+	int baseHP = 60;
 	int baseAttackPower = 3;
 	int baseMagicPower = 10;
 	int baseEvadeStat = 1;
@@ -82,7 +80,6 @@ public:
 	{
 		return Attack4name;
 	}
-
 
 	void takeDamage(int damage)
 	{
