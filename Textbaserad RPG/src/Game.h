@@ -9,5 +9,6 @@ public:
 	void Credits();
 	void CombatTutorial();
 	void BeginAdventure();
-
+	void EnemyAI();
+	void BattleSetup();
 };

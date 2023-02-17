@@ -3,6 +3,7 @@
 #include "Characters.h"
 #include "Enemy.h"
 
+//inputs
 int input_StartMenu = 0;
 int input_TutorialYN = 0;
 int input_Combat = 0;
@@ -10,13 +11,13 @@ int input_Move = 0;
 
 bool yourTurn = true;
 
+//spelar och fiende klasser
 Mage mage;
-Goblin goblin;
-//ändra på eriks sätt
+
+
 Enemy enemy1;
 Enemy enemy2;
 Enemy enemy3;
-
 
 void Game::Run()
 {
@@ -46,11 +47,13 @@ void Game::Run()
 
 void Game::Start()
 {
+
 	while (true)
 	{
 		std::cout << "Text based RPG\n";
 		std::cout << "1. CombatTutorial\n";
-		std::cout << "2. Start Game\n";
+		std::cout << "2. Start game\n";
+		std::cout << "3. Return to main menu\n";
 
 		std::cin >> input_TutorialYN;
 
@@ -63,6 +66,8 @@ void Game::Start()
 		case 2:
 			BeginAdventure();
 			break;
+		case 3:
+			return;
 		}
 	}
 }
@@ -79,40 +84,47 @@ void Game::Credits()
 void Game::CombatTutorial()
 {
 	std::cout << "Combat Tutorial\n";
+	yourTurn = true;
 	while(true)
 	{
 		std::cout << mage.getName() << " : " << mage.getCurrentHP();
 		std::cout << "												";
-		std::cout << goblin.getName() << " : " << goblin.getCurrentHP() << "\n";
+		std::cout << enemy1.getName() << " : " << enemy1.getCurrentHP() << "\n";
 
-		std::cout << "1. Moves\n";
-		std::cout << "2. Items\n";
-
-		//moves eller items
+		//när det är din tur så loopar fighting menyn
 		while (yourTurn == true)
 		{
+			std::cout << "You can choose to attack or to use an item by pressing 1 or 2...\n";
+
+			std::cout << "1. Moves\n";
+			std::cout << "2. Items\n";
+		
 			std::cin >> input_Combat;
 			switch (input_Combat)
 			{
+			//om du väljer move
 			case 1:
-				//alla moves
+				std::cout << "Here are your moves\n";
 				std::cout << "1. " << mage.getAttack1Name() << "\n";
 				std::cout << "2. " << mage.getAttack2Name() << "\n";
 				std::cout << "3. " << mage.getAttack3Name() << "\n";
 				std::cout << "4. " << mage.getAttack4Name() << "\n";
-				std::cin >> input_Move;
+				std::cout << "Anything else. Go back\n";
 
+				std::cin >> input_Move;
+				
 				switch (input_Move)
 				{
 					case 1:
-						std::cout << "Player used " << mage.getAttack1Name() << " and dealt " << mage.Attack1() << " to " << goblin.getName() << "\n";
-						goblin.takeDamage(mage.Attack1());
+						//skriver ut text och sen attackerar fienden
+						std::cout << "Player used " << mage.getAttack1Name() << " and dealt " << mage.Attack1() << " to " << enemy1.getName() << "\n";
+						enemy1.takeDamage(mage.Attack1());
 						yourTurn = false;
 
 						break;
 					case 2:
-						std::cout << "Player used " << mage.getAttack2Name() << " and dealt " << mage.Attack2() << " to " << goblin.getName() << "\n";
-						goblin.takeDamage(mage.Attack2());
+						std::cout << "Player used " << mage.getAttack2Name() << " and dealt " << mage.Attack2() << " to " << enemy1.getName() << "\n";
+						enemy1.takeDamage(mage.Attack2());
 						yourTurn = false;
 
 						break;
@@ -122,29 +134,45 @@ void Game::CombatTutorial()
 
 						break;
 					case 4:
-						std::cout << "Player used " << mage.getAttack4Name() << " and dealt " << mage.Attack4() << " to " << goblin.getName() << "\n";
-						goblin.takeDamage(mage.Attack4());
+						std::cout << "Player used " << mage.getAttack4Name() << " and dealt " << mage.Attack4() << " to " << enemy1.getName() << "\n";
+						enemy1.takeDamage(mage.Attack4());
 						yourTurn = false;
 
 					break;
 				}
 
-
-
 				break;
-			case 2:
 
+			//om du väljer items
+			case 2:
+				std::cout << "Here are your items\n";
 				break;
 
 			}
 
 		}
 
-		//enemy hp minus attack
+		//om fienden dog så vinner du och återvänder till huvudmenyn
+		if (enemy1.getAlive() == false)
+		{
+			std::cout << "You defeated the enemy and beat the combat tutorial\n";
+			std::cout << "Press Enter to go to the main menu\n";
+			std::cin.get();
 
-		//efter player attack om enemy = död gg
-		//efter enemy attack om spelare = död bad gg
+			return;
+		}
 		
+		EnemyAI();
+
+		if (mage.getAlive() == false)
+		{
+			std::cout << "You were defeated in the combat tutorial, you should be ashamed\n";
+			std::cout << "Press Enter to go to the main menu\n";
+			std::cin.get();
+
+			return;
+		}
+
 	}
 
 }
@@ -153,3 +181,28 @@ void Game::BeginAdventure()
 {
 }
 
+void Game::EnemyAI()
+{
+	
+}
+
+void Game::BattleSetup()
+{
+	srand(time(NULL));
+	int enemyCount = rand() % 3 + 1;
+	enemy2.setExists(false);
+	enemy3.setExists(false);
+
+	//om det är mer än en fiende så betyder det att det är åtminstonde 2 fiender
+	if (enemyCount > 1)
+	{
+		enemy2.setExists(true);
+	}
+	//om det är 3 fiender
+	if (enemyCount == 3)
+	{
+		enemy3.setExists(true);
+	}
+
+	//enemy1 får värden
+}

@@ -27,7 +27,7 @@ private:
 
 	//const variabler
 	const std::string name = "Mage";
-	int baseHP = 200;
+	int baseHP = 20;
 	int baseAttackPower = 3;
 	int baseMagicPower = 10;
 	int baseEvadeStat = 1;
@@ -53,36 +53,36 @@ public:
 	{
 		return name;
 	}
-
 	int getBaseHP()
 	{
 		return baseHP;
 	}
-
 	int getCurrentHP()
 	{
 		return currentHP;
+	}
+	bool getAlive()
+	{
+		return alive;
 	}
 
 	std::string getAttack1Name()
 	{
 		return Attack1name;
 	}
-
 	std::string getAttack2Name()
 	{
 		return Attack2name;
 	}
-
 	std::string getAttack3Name()
 	{
 		return Attack3name;
 	}
-
 	std::string getAttack4Name()
 	{
 		return Attack4name;
 	}
+
 
 	void takeDamage(int damage)
 	{
@@ -123,7 +123,7 @@ public:
 
 	int Attack4()
 	{
-		int damage = baseMagicPower * 900;
+		int damage = baseMagicPower * 900 + 999999;
 		return damage;
 	}
 
