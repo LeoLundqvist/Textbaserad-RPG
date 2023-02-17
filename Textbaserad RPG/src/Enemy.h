@@ -30,7 +30,7 @@ private:
 	
 	bool alive = true;
 	int currentHP = baseHP;
-	
+
 	std::string Attack1name = "Bite";
 	std::string Attack2name = "Rock throw";
 	std::string Attack3name = "Apple";

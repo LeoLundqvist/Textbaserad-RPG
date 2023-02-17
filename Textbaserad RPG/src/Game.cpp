@@ -20,11 +20,6 @@ Enemy enemy3;
 
 void Game::Run()
 {
-	//timer start
-	//this game is best experienced with fullscreen
-	//timer stop
-
-
 	while (true)
 	{
 		std::cout << "Text based RPG\n";

@@ -10,6 +10,4 @@ public:
 	void CombatTutorial();
 	void BeginAdventure();
 
-
-
 };

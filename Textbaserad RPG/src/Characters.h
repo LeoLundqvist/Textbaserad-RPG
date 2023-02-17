@@ -6,7 +6,7 @@
 class Character
 {
 private:
-	std::string name = "hello";
+	const std::string name = "hello";
 	int baseHP = 0;
 	int baseAttackPower = 0;
 	int baseMagicPower = 0;
@@ -31,13 +31,14 @@ private:
 	int baseAttackPower = 3;
 	int baseMagicPower = 10;
 	int baseEvadeStat = 1;
-	int level = 1;
+	int currentHP = baseHP;
+
 	bool alive = true;
 
+	int level = 1;
 	int levelUpRequirement = 10;
 	int levelUpXP = 0;
 
-	int currentHP = baseHP;
 
 	std::string Attack1name = "Staff slap";
 	std::string Attack2name = "Explosion";
