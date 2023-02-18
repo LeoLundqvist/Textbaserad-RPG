@@ -2,19 +2,38 @@
 #include "Game.h"
 #include "Characters.h"
 #include "Enemy.h"
+#include "stdlib.h"
 
 //inputs
 int input_StartMenu = 0;
 int input_TutorialYN = 0;
 int input_Combat = 0;
 int input_Move = 0;
+int input_Choice = 0;
+int playerPosition = 140;
 
 bool yourTurn = true;
 
+//array av varje map del
+char currentmap[] = "   e_b_e     t    |   |     | ___e___e_____e |     |    |   |__   s    |     |        |     e_____e__e__h  |     |        |     |        |__o__|      ";
+const char map[] = "   e_b_e     t    |   |     | ___e___e_____e |     |    |   |__   s    |     |        |     e_____e__e__h  |     |        |     |        |_____|      ";
+
+
+/*
+012345678901234
+   e_b_e     t 
+   |   |     | 
+___e___e_____e 
+|     |    |   
+|__   s    |   
+  |        |   
+  e_____e__e__h
+  |     |      
+  |__o__|      
+*/
+
 //spelar och fiende klasser
 Mage mage;
-
-
 Enemy enemy1;
 Enemy enemy2;
 Enemy enemy3;
@@ -23,6 +42,7 @@ void Game::Run()
 {
 	while (true)
 	{
+		system("cls");
 		std::cout << "Text based RPG\n";
 		std::cout << "1. Start Game\n";
 		std::cout << "2. Credits\n";
@@ -47,7 +67,7 @@ void Game::Run()
 
 void Game::Start()
 {
-
+	system("cls");
 	while (true)
 	{
 		std::cout << "Text based RPG\n";
@@ -64,7 +84,7 @@ void Game::Start()
 
 			break;
 		case 2:
-			BeginAdventure();
+			StartSetup();
 			break;
 		case 3:
 			return;
@@ -74,10 +94,12 @@ void Game::Start()
 
 void Game::Credits()
 {
+	system("cls");
 	std::cout << "Created by Leo Lundqvist\n";
 	std::cout << "Made in Visual studios\n";
 	std::cout << "Press enter to go to Main Menu\n";
 
+	std::cin.ignore();
 	std::cin.get();
 }
 
@@ -161,7 +183,6 @@ void Game::CombatTutorial()
 		{
 			std::cout << "You defeated the enemy and beat the combat tutorial\n";
 			std::cout << "Press Enter to go to the main menu\n";
-			std::cin.get();
 
 			return;
 		}
@@ -172,33 +193,92 @@ void Game::CombatTutorial()
 		{
 			std::cout << "You were defeated in the combat tutorial, you should be ashamed\n";
 			std::cout << "Press Enter to go to the main menu\n";
-			std::cin.get();
 
 			return;
 		}
 	}
 }
 
+
+
 void Game::BeginAdventure()
 {
-	std::cout << "Your party consists of a mage, a abrawler and a tank\n";
-	//directions
-	//map
+	std::cout << "Your party consists of a mage, a brawler and a tank\n";
+	std::cout << "Your goal is to defeat the dragon boss at the top of the map\n";
+
+
+	while (true) 
+	{
+		Map();
+		std::cout << "1. Go up\n";
+		std::cout << "2. Go left\n";
+		std::cout << "3. Go down\n";
+		std::cout << "4. Go right\n";
+
+		std::cin >> input_Choice;
+		switch(input_Choice)
+		{
+		case 2:
+			if (currentmap[playerPosition - 1] == '|' || currentmap[playerPosition - 1] == '_')
+			{
+				currentmap[playerPosition] = map[playerPosition];
+				currentmap[playerPosition - 1] = 'o';
+				playerPosition--;
+			}
+			break;
+		case 4:
+			if (currentmap[playerPosition + 1] == '|' || currentmap[playerPosition + 1] == '_')
+			{
+				currentmap[playerPosition] = map[playerPosition];
+				currentmap[playerPosition + 1] = 'o';
+				playerPosition++;
+			}
+			break;
+
+		}
+	}
+	
+}
+
+void Game::Map()
+{
+	std::cout << "\nYour map:\n\n";
+
+	//skriver ut mappen
+	for (int i = 0; i < sizeof(currentmap); i++) {
+		std::cout << currentmap[i];
+		if (i == 14 || i == 29 || i == 44 || i == 59 || i == 74 || i == 89 || i == 104 || i == 119 || i == 134)
+		{
+			std::cout << "\n";
+		}
+	}
+	//const char* arraynamn = stringnamn.c_str();
+	//två arrays, en main mappen utan ändringar och andra med current map
+
+	std::cout << "\n";
+	std::cout << "o : you\n";
+	std::cout << "b : boss\n";
+	std::cout << "e : enemy\n";
+	std::cout << "h : health station\n";
+	std::cout << "s : shop\n\n";
 
 }
 
 void Game::EnemyAI()
 {
-	
+	//om din karaktär har mindre än attack damagen hp
+	//om fiende har lite hp så healar de
+
 }
 
 void Game::BattleSetup()
 {
+
 	srand(time(NULL));
 	int enemyCount = rand() % 3 + 1;
 
 	srand(time(NULL));
-	int whatEnemy = rand() % 4 + 1;
+	int whatEnemy1 = rand() % 4 + 1;
 
 	//om du möter en fiende
 	enemy2.setExists(false);
@@ -223,7 +303,7 @@ void Game::BattleSetup()
 
 	//enemy1 får värden
 
-	switch (whatEnemy)
+	switch (whatEnemy1)
 	{
 	case 1:
 		enemy1.setName("Goblin");
@@ -258,4 +338,10 @@ void Game::BattleSetup()
 		enemy1.setCurrentHP(enemy1.getBaseHP());
 		break;
 	}
+}
+
+void Game::StartSetup()
+{
+	playerPosition = 140;
+	BeginAdventure();
 }

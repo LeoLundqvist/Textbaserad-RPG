@@ -11,4 +11,6 @@ public:
 	void BeginAdventure();
 	void EnemyAI();
 	void BattleSetup();
+	void Map();
+	void StartSetup();
 };
