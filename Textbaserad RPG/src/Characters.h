@@ -4,17 +4,16 @@
 class Character
 {
 private:
-	const std::string name = "hello";
-	int baseHP = 0;
-	int baseAttackPower = 0;
-	int baseMagicPower = 0;
-	int baseEvadeStat = 0;
-	std::string Attack1name = "";
-	std::string Attack2name = "";
-	std::string Attack3name = "";
-	std::string Attack4name = "";
+	std::string species = "Human";
+
+	//tänkte ha alla värden för karaktärerna här men då måstee man iallafall byta ut värderna för de olika klasserna
 
 public:
+	//finns bara för att jag ska visa att jag vet hur arv fungerar
+	std::string getSpecies()
+	{
+		return species;
+	}
 
 };
 
@@ -23,62 +22,103 @@ class Mage : public Character
 private:
 	//hur ska man accessa?
 
-	//const variabler
+	//level 1 const variabler
 	const std::string name = "Mage";
-	int baseHP = 60;
-	int baseAttackPower = 3;
-	int baseMagicPower = 10;
-	int baseEvadeStat = 1;
-	int currentHP = baseHP;
+	const int baseAttackPower = 3;
+	const int baseMagicPower = 10;
+	const int baseHP = 60;
+	const int baseLevel = 1;
+	const int baseXP = 0;
+	const int baseLevelUpRequirement = 10;
 
-	bool alive = true;
+	int attackPower = baseAttackPower;
+    int magicPower = baseMagicPower;
+	int maxHP = baseHP;
+	int currentHP = maxHP;
 
 	int level = 1;
+	int XP = 0;
 	int levelUpRequirement = 10;
-	int levelUpXP = 0;
 
-
-	std::string Attack1name = "Staff slap";
-	std::string Attack2name = "Explosion";
-	std::string Attack3name = "Heal";
-	std::string Attack4name = "Insta Kill(for playtesting)";
+	bool alive = true;
 	
-
-	//behöver override 
-
+	const std::string attack1Name = "Staff slap";
+	const std::string attack2Name = "Explosion";
+	const std::string attack3Name = "Heal";
+	const std::string attack4Name = "Insta Kill(for playtesting)";
+	
 public:
+	//gets
 	std::string getName()
 	{
 		return name;
 	}
-	int getBaseHP()
+	int getAttackPower()
 	{
-		return baseHP;
+		return attackPower;
+	}
+	int getMagicPower()
+	{
+		return magicPower;
+	}
+	int getMaxHP()
+	{
+		return maxHP;
 	}
 	int getCurrentHP()
 	{
 		return currentHP;
 	}
+	int getXP()
+	{
+		return XP;
+	}
+	int getLevelUpRequirement()
+	{
+		return levelUpRequirement - XP;
+	}
 	bool getAlive()
 	{
 		return alive;
 	}
-
 	std::string getAttack1Name()
 	{
-		return Attack1name;
+		return attack1Name;
 	}
 	std::string getAttack2Name()
 	{
-		return Attack2name;
+		return attack2Name;
 	}
 	std::string getAttack3Name()
 	{
-		return Attack3name;
+		return attack3Name;
 	}
 	std::string getAttack4Name()
 	{
-		return Attack4name;
+		return attack4Name;
+	}
+
+	//funktion som ändrar värdet på alla stats till level 1 statsen
+	void startStats()
+	{
+		attackPower = baseAttackPower;
+		magicPower = baseMagicPower;
+		maxHP = baseHP;
+		currentHP = maxHP;
+		level = baseLevel;
+		XP = baseXP;
+		levelUpRequirement = baseLevelUpRequirement;
+		alive = true;
+	}
+
+	//set
+	void setAlive(bool newAlive)
+	{
+		alive = newAlive;
+	}
+	void addXP(int newXP)
+	{
+		XP += newXP;
 	}
 
 	void takeDamage(int damage)
@@ -90,63 +130,86 @@ public:
 		}
 
 	}
+	void heal(int healing)
+	{
+		currentHP += healing;
 
+		if (currentHP > maxHP)
+		{
+			currentHP = maxHP;
+		}
+	}
+
+	//moves
 	int Attack1()
 	{
-		//damage räknas ut med vanliga attack + en random från 0 - 3 och sen tar jag minus
-		//då blir damagen mellan baseAttackpower-1 och baseAttackpower+2
-		int damage = baseAttackPower + (rand() % 4) - 1;
-		return damage;
-
+		return attackPower;
 	}
 	int Attack2()
 	{
-		int damage = baseMagicPower + (rand() % 4) - 1;
-		return damage;
+		return magicPower;
 	}
-
-	void Attack3()
+	int Attack3(std::string healName)
 	{
-		std::cout << "Player used " << Attack4name << " and " << name <<" now has " << currentHP << "\n";
-		
-		currentHP += baseMagicPower;
-
-		if(currentHP > baseHP)
-		{
-			currentHP = baseHP;
-		}
-
+		int healing = magicPower;
+		std::cout << name << " used " << attack4Name << " and healed " << healName << " " << healing << " hp\n";
+		return healing;
 	}
-
 	int Attack4()
 	{
-		int damage = baseMagicPower * 900 + 999999;
-		return damage;
+		return 999999;
 	}
 
 	void LevelUp()
 	{
-		levelUpRequirement += levelUpRequirement;
-		levelUpXP -= levelUpRequirement;
-		level++;
+		if(XP >= levelUpRequirement)
+		{
+			std::cout << "You leveled up\n";
+			//den tar bort xp:n som behövs för att levla upp
+			XP -= levelUpRequirement;
+			levelUpRequirement += levelUpRequirement;
+			level++;
 
-		baseHP += 50;
-		baseAttackPower += 1;
-		baseMagicPower += 2;
-		baseEvadeStat++;
-
+			maxHP += 50;
+			attackPower += 1;
+			magicPower += 2;
+		}
 	}
 };
 
 class Brawler : public Character
 {
+private:
+	bool alive = false;
+
 public:
+	bool getAlive()
+	{
+		return alive;
+	}
+	
+	void setAlive(bool newAlive)
+	{
+		alive = newAlive;
+	}
 
 };
 
 class Tank : public Character
 {
-public:
+private:
 
+	bool alive = false;
+
+public:
+	bool getAlive()
+	{
+		return alive;
+	}
+
+	void setAlive(bool newAlive)
+	{
+		alive = newAlive;
+	}
 
 };

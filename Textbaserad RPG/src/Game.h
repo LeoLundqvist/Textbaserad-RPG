@@ -5,10 +5,12 @@ class Game
 {
 public:
 	void Run();
-	void Start();
 	void Credits();
-	void CombatTutorial();
-	void BeginAdventure();
+	void Combat();
+	void MageTurn();
+	void BrawlerTurn();
+	void TankTurn();
+	void Overworld();
 	void EnemyAI();
 	void BattleSetup();
 	void Map();

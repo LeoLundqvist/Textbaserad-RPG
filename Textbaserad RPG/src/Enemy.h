@@ -6,18 +6,18 @@ class Enemy
 private:
 	//hur ska man accessa?
 	std::string name = "Goblin";
-	int baseHP = rand()% 10 + 1;
-	int baseAttackPower = 2;
-	int baseMagicPower = 10;
-	int baseEvadeStat = 1;
-	int currentHP = baseHP;
+	int maxHP = 10;
+	int attackPower = 2;
+	int magicPower = 10;
+	int currentHP = maxHP;
+	int XP = 5;
 
 	bool exists = true;
 	bool alive = true;
 
-	std::string Attack1name = "Bite";
-	std::string Attack2name = "Rock throw";
-	std::string Attack3name = "Apple";
+	std::string Attack1name = "Hit";
+	std::string Attack2name = "Telekenisis";
+	std::string Attack3name = "A really tasty snack";
 	std::string Attack4name = "High Five"; //buff
 
 	//behöver override 
@@ -27,9 +27,9 @@ public:
 	{
 		return name;
 	}
-	int getBaseHP()
+	int getMaxHP()
 	{
-		return baseHP;
+		return maxHP;
 	}
 	bool getAlive()
 	{
@@ -43,6 +43,10 @@ public:
 	{
 		return currentHP;
 	}
+	int getXP()
+	{
+		return XP;
+	}
 
 	void setName(std::string newName)
 	{
@@ -50,15 +54,15 @@ public:
 	}
 	void setBaseHP(int newBaseHP)
 	{
-		baseHP = newBaseHP;
+		maxHP = newBaseHP;
 	}
 	void setBaseAttackPower(int newBaseAttackPower)
 	{
-		baseAttackPower = newBaseAttackPower;
+		attackPower = newBaseAttackPower;
 	}
 	void setBaseMagicPower(int newBaseMagicPower)
 	{
-		baseMagicPower = newBaseMagicPower;
+		magicPower = newBaseMagicPower;
 	}
 	void setCurrentHP(int newCurrentHP)
 	{
@@ -73,8 +77,6 @@ public:
 		alive = newAlive;
 	}
 
-
-
 	void takeDamage(int damage)
 	{
 		currentHP -= damage;
@@ -83,6 +85,11 @@ public:
 			currentHP = 0;
 			alive = false;
 		}
+	}
+
+	int attack1()
+	{
+		return attackPower;
 	}
 
 };
