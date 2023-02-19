@@ -9,6 +9,7 @@ private:
 	int cost = 10;
 
 public:
+	//gets
 	std::string getName()
 	{
 		return name;
@@ -29,6 +30,11 @@ private:
 	std::string name = "Revive";
 	int cost = 20;
 public:
+	//gets
+	std::string getName()
+	{
+		return name;
+	}
 	int getCost()
 	{
 		return cost;

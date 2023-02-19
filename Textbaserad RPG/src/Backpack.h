@@ -38,7 +38,6 @@ public:
 	{
 		potions += amount;
 	}
-
 	void reciveRevives(int amount)
 	{
 		revives += amount;

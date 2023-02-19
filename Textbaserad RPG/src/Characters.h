@@ -6,8 +6,6 @@ class Character
 private:
 	std::string species = "Human";
 
-	//tänkte ha alla värden för karaktärerna här men då måstee man iallafall byta ut värderna för de olika klasserna
-
 public:
 	//finns bara för att jag ska visa att jag vet hur arv fungerar
 	std::string getSpecies()
@@ -20,7 +18,6 @@ public:
 class Mage : public Character
 {
 private:
-	//hur ska man accessa?
 
 	//level 1 const variabler
 	const std::string name = "Mage";
@@ -120,6 +117,7 @@ public:
 	{
 		alive = newAlive;
 	}
+	//lägger till xp
 	void addXP(int newXP)
 	{
 		XP += newXP;
@@ -128,6 +126,7 @@ public:
 	void takeDamage(int damage)
 	{
 		currentHP-=damage;
+		//om hp blir 0 eller lägre så blir currentHP 0 och alive blir false
 		if(currentHP <= 0)
 		{
 			currentHP = 0;
@@ -138,7 +137,7 @@ public:
 	void heal(int healing)
 	{
 		currentHP += healing;
-
+		//om currentHP blir större än maxHP så blir currentHP lika stort som maxHP
 		if (currentHP > maxHP)
 		{
 			currentHP = maxHP;
@@ -167,6 +166,7 @@ public:
 
 	void LevelUp()
 	{
+		//om du har mer eller lika mycket XP som levelUpRequirement så levlar du upp
 		if(XP >= levelUpRequirement)
 		{
 			std::cout << "You leveled up\n";

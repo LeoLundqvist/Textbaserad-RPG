@@ -4,8 +4,7 @@
 class Enemy
 {
 private:
-	//hur ska man accessa?
-	std::string name = "Goblin";
+	std::string name = "Idk";
 	int maxHP = 10;
 	int attackPower = 2;
 	int magicPower = 2;
@@ -18,8 +17,6 @@ private:
 
 	std::string attack1Name = "Pauwnch";
 	std::string attack2Name = "Telekenisis";
-
-	//behöver override 
 
 public:
 	std::string getName()

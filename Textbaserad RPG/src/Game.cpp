@@ -23,18 +23,19 @@ bool brawlerTurn = true;
 bool tankTurn = true;
 
 //char array av varje space på mappen
-//currentMap är den med spelarens position på
+//är en array för att mappen kommer inte ändra storlek
+//currentMap är mappen som visas för användaren, den har spelaren på sig
 char currentMap[] = "                  e_g_e          |   |     t ___e___e_____e |     |    |   |__   s    |     |        |     e_____e__e     |     |        |     |        |_____|                    ";
-//map har fakta om vilka fiender som är döda eller inte
+//denna mappen har fakta om ändringar i mappen, som när man besegrar en fiende
 char map[] = "                  e_g_e          |   |     t ___e___e_____e |     |    |   |__   s    |     |        |     e_____e__e     |     |        |     |        |_____|                    ";
-//detta är startmappen (utan spelare och med alla fiender levande)
+//detta är startmappen, typ som en blueprint
 const char mapBlueprint[] = "                  e_g_e          |   |     t ___e___e_____e |     |    |   |__   s    |     |        |     e_____e__e     |     |        |     |        |_____|                    ";
 
 //spelar positioner på mappen
 int playerSpawnPosition = 155;
 int playerPosition = 0;
 
-//enemy
+//enemyns target
 int enemyTarget = 0;
 
 //spelar och fiende klasser
@@ -45,6 +46,7 @@ Enemy enemy1;
 Enemy enemy2;
 Enemy enemy3;
 
+//inventory och item klasser
 Backpack backpack;
 Potion potion;
 Revive revive;
@@ -89,25 +91,29 @@ void Game::Credits()
 
 void Game::StartSetup()
 {
+	//resetar alla stats till level 1
 	mage.startStats();
 	brawler.startStats();
 	tank.startStats();
 	backpack.startInventory();
 
-	//resetar mappen
+	//resetar mappen genom att bytta ut hela arrayerna med mapBlueprint
 	for (int i = 0; i < sizeof(mapBlueprint); i++)
 	{
 		currentMap[i] = mapBlueprint[i];
 		map[i] = mapBlueprint[i];
 	}
+
 	//sätter ut spelaren på mappen
 	playerPosition = playerSpawnPosition;
-	currentMap[playerSpawnPosition] = 'o';
+	//byter ut charen som är på spelarens position med o
+	currentMap[playerPosition] = 'o';
 	Overworld();
 }
 
 void Game::Overworld()
 {
+	//denna loopar tills alla dör eller return
 	while (mage.getAlive() == true || brawler.getAlive() == true || tank.getAlive() == true)
 	{
 		system("cls");
@@ -124,19 +130,28 @@ void Game::Overworld()
 		std::cin >> input_Choice;
 		switch(input_Choice)
 		{
+		//går upp
 		case 1:
+			//om du träffar på en walkable space
+			//anledningen varför jag tar playerPosition-15 är för att mappen är 15 bred och mappen är bara en lång array 
+			//om jag tar minus går den tillbaks 15 steg i arrayen, och då blir det punkten över spelaren
 			if (currentMap[playerPosition - 15] == '|' || currentMap[playerPosition - 15] == '_' || currentMap[playerPosition - 15] == 'x')
 			{
+				//byter ut spelarens förra position med spacen
+				//om jag stog på x så kommer den förvandlas tillbak till ett x
 				currentMap[playerPosition] = map[playerPosition];
+
 				currentMap[playerPosition - 15] = 'o';
 				playerPosition= playerPosition-15;
 			}
+			//om du träffar en fiende
 			else if (currentMap[playerPosition - 15] == 'e')
 			{
 				currentMap[playerPosition] = map[playerPosition];
 				currentMap[playerPosition - 15] = 'o';
 				playerPosition = playerPosition - 15;
 				Combat();
+				//byter ut map playerposition med x för att fienden är besegrad och då kan man inte möta den igen
 				map[playerPosition] = 'x';
 			}
 			else if (currentMap[playerPosition - 15] == 't')
@@ -148,7 +163,9 @@ void Game::Overworld()
 				map[playerPosition] = 'x';
 			}
 			break;
+		//gå ner
 		case 2:
+			//samma sak här som med den förra fast addera för att gå neråt
 			if (currentMap[playerPosition + 15] == '|' || currentMap[playerPosition + 15] == '_' || currentMap[playerPosition + 15] == 'x')
 			{
 				currentMap[playerPosition] = map[playerPosition];
@@ -163,6 +180,7 @@ void Game::Overworld()
 				Combat();
 				map[playerPosition] = 'x';
 			}
+			//om man träffar shopen
 			else if (currentMap[playerPosition + 15] == 's')
 			{
 				currentMap[playerPosition] = map[playerPosition];
@@ -172,7 +190,9 @@ void Game::Overworld()
 			}
 
 			break;
+		//gå vänster
 		case 3:
+			// tar minus för att då får man värdet till vänster om spelarens position
 			if (currentMap[playerPosition - 1] == '|' || currentMap[playerPosition - 1] == '_' || currentMap[playerPosition - 1] == 'x')
 			{
 				currentMap[playerPosition] = map[playerPosition];
@@ -187,6 +207,7 @@ void Game::Overworld()
 				Combat();
 				map[playerPosition] = 'x';
 			}
+			//har bara goal på gå höger och gå vänster för att goal ligger på en vågrät linje 
 			else if (currentMap[playerPosition - 1] == 'g')
 			{
 				system("cls");
@@ -197,7 +218,7 @@ void Game::Overworld()
 				return;
 			}
 			break;
-
+		//gå höger
 		case 4:
 			if (currentMap[playerPosition + 1] == '|' || currentMap[playerPosition + 1] == '_' || currentMap[playerPosition + 1] == 'x')
 			{
@@ -235,10 +256,12 @@ void Game::Overworld()
 			std::cin.ignore();
 			std::cin.get();
 			break;
-
+		
+		//hela partyt och deras stats
 		case 6:
 			system("cls");
 			std::cout << "Party Member 1: "<< mage.getName() << "\n";
+			//har species bara för att visa att jag vet hur arv fungerar
 			std::cout << "Species : " << mage.getSpecies() << "\n";
 			std::cout << "HP : " << mage.getCurrentHP() << "/" << mage.getMaxHP() << "\n";
 			std::cout << "Level : " << mage.getLevel() << "\n";
@@ -267,6 +290,7 @@ void Game::Overworld()
 			std::cin.ignore();
 			std::cin.get();
 			break;
+		//return to main menu
 		case 7:
 			return;
 		}
@@ -282,15 +306,13 @@ void Game::Map()
 	for (int i = 0; i < sizeof(currentMap); i++) 
 	{
 		std::cout << currentMap[i];
-		//massa enters på dessa specifika punkterna för att mappen är 15 bred och index börjar på 0
+		//för att mappen inte ska vara 1 bokstav hög så sätter jag ut enters
+		// anledningen varför punkterna är så specifika är för att mappen är 15 bred och index börjar på 0
 		if (i == 14 || i == 29 || i == 44 || i == 59 || i == 74 || i == 89 || i == 104 || i == 119 || i == 134 || i == 149)
 		{
 			std::cout << "\n";
 		}
 	}
-	//const char* arraynamn = stringnamn.c_str();
-	//två arrays, en main mappen utan ändringar och andra med current map
-
 	std::cout << "\n";
 	std::cout << "o : you\n";
 	std::cout << "g : goal\n";
@@ -307,11 +329,14 @@ void Game::Treasure()
 	std::cout << "'The combination is this assignments grade, but if you get it wrong the chest will evaporate'\n";
 	std::cout << "Type in one letter\n";
 	std::cin >> input_Grade;
+	//gör din input till lower case så det inte gör något ifall du skriver med stor eller liten bokstav
 	if ((char)tolower(input_Grade) == 'b')
 	{
 		std::cout << "Congratulations, you got it right\n";
+		//får 100000 moneys
 		backpack.rewardMoney(100000);
 	}
+	//väldigt elakt ifall du väljer den här
 	else if((char)tolower(input_Grade) == 'f')
 	{
 		std::cout << "Du är en ondskeful man\n";
@@ -327,27 +352,82 @@ void Game::Treasure()
 
 }
 
+void Game::Shop()
+{
+	std::cout << "What do you want to buy?\n";
+	std::cout << "1. " << potion.getName() << " which costs " << potion.getCost() << "\n";
+	std::cout << "2. " << revive.getName() << " which costs " << revive.getCost() << "\n";
+	std::cout << "Press anything else to return to map\n";
+	std::cin >> input_Shop;
+	if (input_Shop == 1)
+	{
+		std::cout << "How many?\n";
+		std::cout << "Your money : " << backpack.getMoney() << "\n";
+
+		std::cin >> input_Amount;
+
+		//kollar ifall du inte har råd
+		if (input_Amount * potion.getCost() > backpack.getMoney())
+		{
+			std::cout << "You don't have the money for that many\n";
+			std::cout << "Press anything to return to map\n";
+			std::cin.ignore();
+			std::cin.get();
+		}
+		else
+		{
+			//lägger till potions i inventory
+			backpack.recivePotions(input_Amount);
+			//tar bort pengar från inventoryt
+			backpack.buy(input_Amount * potion.getCost());
+		}
+	}
+	else if (input_Shop == 2)
+	{
+		std::cout << "How many?\n";
+		std::cin >> input_Amount;
+		if (input_Amount * revive.getCost() > backpack.getMoney())
+		{
+			std::cout << "You don't have the money for that many\n";
+			std::cout << "Press anything to return to map\n";
+			std::cin.ignore();
+			std::cin.get();
+		}
+		else
+		{
+			backpack.reciveRevives(input_Amount);
+			backpack.buy(input_Amount * revive.getCost());
+		}
+	}
+
+}
+
 void Game::BattleSetup()
 {
-
+	//en random för hur många fiender man möter
 	srand((unsigned)time(0));
 	int enemyCount = rand() % 3 + 1;
 	
+	//en random för vilken fiende man möter
+	//har (unsigned)time(0) + 1 för att då blir det olika randoms för alla randomfunktioner
 	srand((unsigned)time(0) + 1);
 	int whatEnemy1 = rand() % 4 + 1;
 
 	int whatEnemy2 = 0;
 	int whatEnemy3 = 0;
 
-	//om det är mer än en fiende så betyder det att det är åtminstonde 2 fiender
-	if (enemyCount > 1)
+	//kollar ifall det är åtminstonde 2 fiender
+	if (enemyCount >= 2)
 	{
+		//sätter fienden som existerande och en random fiende klass
 		enemy2.setExists(true);
 		srand((unsigned)time(0) + 2);
 		whatEnemy2 = rand() % 4 + 1;
 	}
 	else
 	{
+		//annars existerar fienden inte, är död och har namnet noone
+		//den får namnet noone för att då visas noone i combat, annars står det ett fiendenamn när det egentligen inte finns en fiende där
 		enemy2.setExists(false);
 		enemy2.setAlive(false);
 		enemy2.setName("Noone");
@@ -366,7 +446,7 @@ void Game::BattleSetup()
 		enemy3.setName("Noone");
 	}
 
-	//enemy1 får värden
+	//enemy1 får värden baserat på vilken random nummer whatEnemy1 blev
 	switch (whatEnemy1)
 	{
 	case 1:
@@ -474,7 +554,6 @@ void Game::BattleSetup()
 		enemy3.setCurrentHP(enemy3.getMaxHP());
 		break;
 	}
-
 }
 
 void Game::Combat()
@@ -484,13 +563,14 @@ void Game::Combat()
 
 	while (true)
 	{
+		//gör att alla turns sanna så alla kan attackera
 		mageTurn = true;
 		brawlerTurn = true;
 		tankTurn = true;
 		//gör så han inte protectar sina teammates varje runda
 		tank.Attack3(false);
 
-		//när det är din tur så loopar fighting menyn
+		//när det är mage tur och mage är vid liv så loopar mages fighing meny
 		while (mageTurn == true && mage.getAlive() == true)
 		{
 			MageTurn();
@@ -503,6 +583,7 @@ void Game::Combat()
 			return;
 		}
 
+		//när det är brawlers tur och brawler är vid liv så loopar brawlers fighing meny
 		while (brawlerTurn == true && brawler.getAlive() == true)
 		{
 			BrawlerTurn();
@@ -514,6 +595,7 @@ void Game::Combat()
 			return;
 		}
 
+		//när det är tanks tur och tanks är vid liv så loopar tanks fighing meny
 		while (tankTurn == true && tank.getAlive() == true)
 		{
 			TankTurn();
@@ -526,7 +608,7 @@ void Game::Combat()
 		}
 
 		EnemyAI();
-
+		//om alla teammates är döda
 		if (mage.getAlive() == false && brawler.getAlive() == false && tank.getAlive() == false)
 		{
 			std::cout << "You lost\n";
@@ -542,7 +624,7 @@ void Game::Combat()
 
 void Game::HPBar()
 {
-	//fiende död är inget namn ingen där h9aha
+	//om fiende är död så får den namnet Noone så det inte står att man kan attackera dem
 	if (enemy1.getAlive() == false)
 	{
 		enemy1.setName("Noone");
@@ -560,6 +642,7 @@ void Game::HPBar()
 	std::cout << mage.getName() << " : " << mage.getCurrentHP() << "/" << mage.getMaxHP();
 	std::cout << "												";
 
+	//skriver ut enemys hp ifall de är vid liv
 	if (enemy1.getAlive() == true)
 	{
 		std::cout << enemy1.getName() << " : " << enemy1.getCurrentHP() << "/" << enemy1.getMaxHP();
@@ -586,6 +669,7 @@ void Game::HPBar()
 
 void Game::MageTurn()
 {
+	//jag kommer mest skriva i mage turns för att alla turns är typ kopior med småskillnader
 	system("cls");
 	HPBar();
 	std::cout << mage.getName() << "'s turn\n";
@@ -598,6 +682,7 @@ void Game::MageTurn()
 	HPBar();
 	switch (input_Combat)
 	{
+	//om du väljer moves
 	case 1:
 		std::cout << "1. " << mage.getAttack1Name() << "\n";
 		std::cout << "2. " << mage.getAttack2Name() << "\n";
@@ -610,17 +695,17 @@ void Game::MageTurn()
 		HPBar();
 		switch (input_Move)
 		{
+		//move 1
 		case 1:
-
 			std::cout << "Which enemy would you like to attack?\n";
 			std::cout << "1. " << enemy1.getName() << "\n";
 			std::cout << "2. " << enemy2.getName() << "\n";
 			std::cout << "3. " << enemy3.getName() << "\n";
 			std::cin >> input_Who;
 			system("cls");
+			//om input == 1 och fienden finns attackerar mage fiende 1 och sen sätter mageTurn till false
 			if (input_Who == 1 && enemy1.getExists() == true)
 			{
-				//heal funktionen behöver en int och int funktionen behöver en string
 				std::cout << mage.getName() << " used " << mage.getAttack1Name() << " and dealt " << mage.Attack1() << " to " << enemy1.getName() << "\n";
 				enemy1.takeDamage(mage.Attack1());
 				mageTurn = false;
@@ -637,6 +722,7 @@ void Game::MageTurn()
 				enemy3.takeDamage(mage.Attack1());
 				mageTurn = false;
 			}
+			//om du väljer något annat än 1-3 eller om fienden inte finns där
 			else
 			{
 				std::cout << "There's no enemy there...";
@@ -646,6 +732,7 @@ void Game::MageTurn()
 
 			break;
 		case 2:
+			//samma som move 1 fast med attack2 värden istället för attack1
 			std::cout << "Which enemy would you like to attack?\n";
 			std::cout << "1. " << enemy1.getName() << "\n";
 			std::cout << "2. " << enemy2.getName() << "\n";
@@ -688,24 +775,29 @@ void Game::MageTurn()
 			std::cin >> input_Who;
 			system("cls");
 
+			//om du väljer att heala mage
 			if (input_Who == 1)
 			{
-				//heal funktionen behöver en int och int funktionen behöver en string
+				//heal funktionen behöver en int och int funktionen behöver en string för att funktionen skriver ut vem som healas
 				mage.heal(mage.Attack3(mage.getName()));
 				mageTurn = false;
 			}
+			//om du väljer att heala brawler
 			else if (input_Who == 2)
 			{
 				brawler.heal(mage.Attack3(brawler.getName()));
 				mageTurn = false;
 			}
+			//om du väljer att heala tank
 			else if (input_Who == 3)
 			{
 				tank.heal(mage.Attack3(tank.getName()));
 				mageTurn = false;
 			}
 			break;
+
 		case 4:
+			//instakillar alla fiender
 			std::cout << mage.getName() << " used " << mage.getAttack4Name() << " and dealt " << mage.Attack4() << " to every enemy\n";
 			enemy1.takeDamage(mage.Attack4());
 			enemy2.takeDamage(mage.Attack4());
@@ -741,7 +833,6 @@ void Game::BrawlerTurn()
 	HPBar();
 	switch (input_Combat)
 	{
-		//om du väljer move
 	case 1:
 		std::cout << "1. " << brawler.getAttack1Name() << "\n";
 		std::cout << "2. " << brawler.getAttack2Name() << "\n";
@@ -763,7 +854,6 @@ void Game::BrawlerTurn()
 			system("cls");
 			if (input_Who == 1 && enemy1.getExists() == true)
 			{
-				//heal funktionen behöver en int och int funktionen behöver en string
 				std::cout << brawler.getName() << " used " << brawler.getAttack1Name() << " and dealt " << brawler.Attack1() << " to " << enemy1.getName() << "\n";
 				enemy1.takeDamage(brawler.Attack1());
 				brawlerTurn = false;
@@ -797,7 +887,6 @@ void Game::BrawlerTurn()
 			system("cls");
 			if (input_Who == 1 && enemy1.getExists() == true)
 			{
-				//heal funktionen behöver en int och int funktionen behöver en string
 				std::cout << brawler.getName() << " used " << brawler.getAttack2Name() << " and dealt " << brawler.Attack2() << " to " << enemy1.getName() << "\n";
 				enemy1.takeDamage(brawler.Attack2());
 				brawlerTurn = false;
@@ -830,7 +919,6 @@ void Game::BrawlerTurn()
 			system("cls");
 			if (input_Who == 1 && enemy1.getExists() == true)
 			{
-				//heal funktionen behöver en int och int funktionen behöver en string
 				enemy1.takeDamage(brawler.Attack3());
 				std::cout << " damage to " << enemy1.getName() << "\n";
 				brawlerTurn = false;
@@ -894,6 +982,7 @@ void Game::TankTurn()
 
 		switch (input_Move)
 		{
+		//attack 1
 		case 1:
 
 			std::cout << "Which enemy would you like to attack?\n";
@@ -904,7 +993,6 @@ void Game::TankTurn()
 			system("cls");
 			if (input_Who == 1 && enemy1.getExists() == true)
 			{
-				//heal funktionen behöver en int och int funktionen behöver en string
 				std::cout << tank.getName() << " used " << tank.getAttack1Name() << " and dealt " << tank.Attack1() << " to " << enemy1.getName() << "\n";
 				enemy1.takeDamage(tank.Attack1());
 				tankTurn = false;
@@ -927,13 +1015,13 @@ void Game::TankTurn()
 			}
 
 			break;
+		//attack 2
 		case 2:
 			std::cout << "Which enemy would you like to attack?\n";
 			std::cout << "1. " << enemy1.getName() << "\n";
 			std::cout << "2. " << enemy2.getName() << "\n";
 			std::cout << "3. " << enemy3.getName() << "\n";
 			std::cin >> input_Who;
-			//vem man attackerar
 			system("cls");
 			if (input_Who == 1 && enemy1.getExists() == true)
 			{
@@ -958,6 +1046,7 @@ void Game::TankTurn()
 				std::cout << "There's no enemy there...";
 			}
 			break;
+		//attack 3
 		case 3:
 			system("cls");
 			std::cout << tank.getName() << " used distract\n";
@@ -982,14 +1071,14 @@ void Game::TankTurn()
 void Game::EnemyAI()
 {
 	//spagetti kod delen av projektet
-	//Jag har inte tid att göra en bra "AI" och jag har aldrig gjort en AI
+	//Jag har inte tid att göra en bra "AI" och jag vet inte hur man gör en AI
 
 	srand((unsigned)time(0)+1);
 	enemyTarget = rand() % 3 + 1;
-	//enemy 1 "AI"
+	//enemy 1 "AI" aktiveras ifall fiende 1 finns och lever
 	if(enemy1.getAlive() == true && enemy1.getExists() == true)
 	{
-		//om tank protectar
+		//om tank protectar så attackerar fienden tank
 		if (tank.getProtecting() == true && tank.getAlive() == true)
 		{
 			if (enemy1.attack1() > enemy1.attack2())
@@ -1003,7 +1092,7 @@ void Game::EnemyAI()
 				tank.takeDamage(enemy1.attack2());
 			}
 		}
-		//om tank är låg
+		//om tank är oneshot så attackeras tank
 		else if (tank.getCurrentHP() < enemy1.attack1())
 		{
 			std::cout << enemy1.getName() << " used " << enemy1.getAttack1Name() << " and dealt " << enemy1.attack1() << " to " << enemy1.getName() << "\n";
@@ -1014,7 +1103,7 @@ void Game::EnemyAI()
 			std::cout << enemy1.getName() << " used " << enemy1.getAttack2Name() << " and dealt " << enemy1.attack2() << " to " << tank.getName() << "\n";
 			tank.takeDamage(enemy1.attack2());
 		}
-		//om mage är låg
+		//om mage är oneshot så attackeras mage
 		else if (mage.getCurrentHP() < enemy1.attack1())
 		{
 			std::cout << enemy1.getName() << " used " << enemy1.getAttack1Name() << " and dealt " << enemy1.attack1() << " to " << mage.getName() << "\n";
@@ -1025,6 +1114,7 @@ void Game::EnemyAI()
 			std::cout << enemy1.getName() << " used " << enemy1.getAttack2Name() << " and dealt " << enemy1.attack2() << " to " << mage.getName() << "\n";
 			mage.takeDamage(enemy1.attack2());
 		}
+		//om brawler är oneshot så attackeras brawler
 		else if (brawler.getCurrentHP() < enemy1.attack1())
 		{
 			std::cout << enemy1.getName() << " used " << enemy1.getAttack1Name() << " and dealt " << enemy1.attack1() << " to " << brawler.getName() << "\n";
@@ -1035,9 +1125,10 @@ void Game::EnemyAI()
 			std::cout << enemy1.getName() << " used " << enemy1.getAttack2Name() << " and dealt " << enemy1.attack2() << " to " << brawler.getName() << "\n";
 			brawler.takeDamage(enemy1.attack2());
 		}
-		//tank
+		//om random enemyTarget är 1 så attackeras tank
 		else if (enemyTarget == 1)
 		{
+			//om attack1 skadar mer än attack2 så attackerar fienden med attack1
 			if(enemy1.attack1() > enemy1.attack2())
 			{
 				std::cout << enemy1.getName() << " used " << enemy1.getAttack1Name() << " and dealt " << enemy1.attack1() << " to " << enemy1.getName() << "\n";
@@ -1049,7 +1140,7 @@ void Game::EnemyAI()
 				tank.takeDamage(enemy1.attack2());
 			}
 		}
-		//mage
+		//om random enemyTarget är 2 så attackeras mage
 		else if (enemyTarget == 2)
 		{
 			if (enemy1.attack1() > enemy1.attack2())
@@ -1063,7 +1154,7 @@ void Game::EnemyAI()
 				mage.takeDamage(enemy1.attack2());
 			}
 		}
-		//brawler
+		//om random enemyTarget är 3 så attackeras brawler
 		else if (enemyTarget == 3)
 		{
 			if (enemy1.attack1() > enemy1.attack2())
@@ -1078,9 +1169,8 @@ void Game::EnemyAI()
 			}
 		}
 
-
 	}
-	//jag kan fixa så att alla fiender kan attackera men det är bara att kopiera koden och ändra några värden
+	//jag kan fixa så att alla fiender kan attackera men det är bara att kopiera koden och ändra alla enemy klasser från enemy1 till enemy2
 	//tror inte att det är värt för att det kommer inte höja betyget och det finns andra viktigare saker jag kan göra med tiden
 
 	std::cin.ignore();
@@ -1114,52 +1204,6 @@ void Game::BattleWon()
 	std::cin.get();
 }
 
-void Game::Shop()
-{
-	std::cout << "What do you want to buy?\n";
-	std::cout << "1. " << potion.getName() << " which costs " << potion.getCost()  << "\n";
-	std::cout << "2. " << revive.getName() << " which costs " << revive.getCost() << "\n";
-	std::cout << "Press anything else to return to map\n";
-	std::cin >> input_Shop;
-	if(input_Shop == 1)
-	{
-		std::cout << "How many?\n";
-		std::cout << "Your money : " << backpack.getMoney() << "\n";
-
-		std::cin >> input_Amount;
-		if (input_Amount * potion.getCost() > backpack.getMoney())
-		{
-			std::cout << "You don't have the money for that many\n";
-			std::cout << "Press anything to return to map\n";
-			std::cin.ignore();
-			std::cin.get();
-		}
-		else
-		{
-			backpack.recivePotions(input_Amount);
-			backpack.buy(input_Amount * potion.getCost());
-		}
-	}
-	else if (input_Shop == 2)
-	{
-		std::cout << "How many?\n";
-		std::cin >> input_Amount;
-		if (input_Amount * revive.getCost() > backpack.getMoney())
-		{
-			std::cout << "You don't have the money for that many\n";
-			std::cout << "Press anything to return to map\n";
-			std::cin.ignore();
-			std::cin.get();
-		}
-		else
-		{
-			backpack.reciveRevives(input_Amount);
-			backpack.buy(input_Amount*revive.getCost());
-		}
-	}
-
-}
-
 void Game::UseItems()
 {
 	std::cout << "What do you want to use?\n";
@@ -1168,6 +1212,7 @@ void Game::UseItems()
 	std::cout << "Type any other number to go back\n";
 
 	std::cin >> input_Combat;
+	//om du väljer potions och har några potions i inventoryt
 	if (input_Combat == 1 && backpack.getPotions() > 0)
 	{
 		std::cout << "Which party member would you like to heal?\n";
@@ -1177,19 +1222,24 @@ void Game::UseItems()
 		std::cout << "Type any other number to go back\n";
 		std::cin >> input_Who;
 
+		//om du väljer mage och mage lever
 		if (input_Who == 1 && mage.getAlive() == true)
 		{
-			//heal funktionen behöver en int och int funktionen behöver en string
+			//mage healas med potionens effekt och en potion används
 			mage.heal(potion.getHealPoints());
 			backpack.usePotion();
 		}
+		//om du väljer mage och mage lever
+
 		else if (input_Who == 2 && brawler.getAlive() == false)
 		{
+			//brawler healas med potionens effekt och en potion används
 			brawler.heal(potion.getHealPoints());
 			backpack.usePotion();
 		}
 		else if (input_Who == 3 && tank.getAlive() == false)
 		{
+			//tank healas med potionens effekt och en potion används
 			tank.heal(potion.getHealPoints());
 			backpack.usePotion();
 		}
@@ -1204,9 +1254,10 @@ void Game::UseItems()
 		std::cout << "Type any other number to go back\n";
 		std::cin >> input_Who;
 
+		//funkar bara ifall karaktären är död
 		if (input_Who == 1 && mage.getAlive() == false)
 		{
-			//heal funktionen behöver en int och int funktionen behöver en string
+			//återupllivar karaktären, healar och använder en revive
 			mage.setAlive(true);
 			mage.heal(revive.getHealPoints());
 			backpack.useRevive();
