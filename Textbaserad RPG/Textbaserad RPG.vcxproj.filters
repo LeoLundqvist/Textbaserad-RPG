@@ -32,5 +32,11 @@
     <ClInclude Include="src\Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Backpack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Items.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

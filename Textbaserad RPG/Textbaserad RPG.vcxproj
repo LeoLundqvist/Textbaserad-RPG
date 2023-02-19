@@ -143,9 +143,11 @@
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Backpack.h" />
     <ClInclude Include="src\Enemy.h" />
     <ClInclude Include="src\Characters.h" />
     <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\Items.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

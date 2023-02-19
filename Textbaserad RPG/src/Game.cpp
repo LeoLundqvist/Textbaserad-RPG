@@ -2,6 +2,8 @@
 #include "Game.h"
 #include "Characters.h"
 #include "Enemy.h"
+#include "Backpack.h"
+#include "Items.h"
 #include "stdlib.h"
 
 //inputs
@@ -49,6 +51,9 @@ Enemy enemy1;
 Enemy enemy2;
 Enemy enemy3;
 
+Backpack backpack;
+Potion potion;
+
 void Game::Run()
 {
 	while (true)
@@ -91,7 +96,8 @@ void Game::StartSetup()
 {
 	mage.startStats();
 	brawler.startStats();
-	tank.setAlive(false);
+	tank.startStats();
+	backpack.startInventory();
 
 	//resetar mappen
 	for (int i = 0; i < sizeof(mapBlueprint); i++)
@@ -135,6 +141,14 @@ void Game::Overworld()
 				currentMap[playerPosition - 15] = 'o';
 				playerPosition = playerPosition - 15;
 				Combat();
+				map[playerPosition] = 'x';
+			}
+			else if (currentMap[playerPosition - 15] == 't')
+			{
+				currentMap[playerPosition] = map[playerPosition];
+				currentMap[playerPosition - 15] = 'o';
+				playerPosition = playerPosition - 15;
+
 				map[playerPosition] = 'x';
 			}
 			break;
