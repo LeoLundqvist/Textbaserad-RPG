@@ -8,7 +8,7 @@ private:
 	std::string name = "Goblin";
 	int maxHP = 10;
 	int attackPower = 2;
-	int magicPower = 10;
+	int magicPower = 2;
 	int currentHP = maxHP;
 	int XP = 5;
 
@@ -17,7 +17,7 @@ private:
 
 	std::string Attack1name = "Hit";
 	std::string Attack2name = "Telekenisis";
-	std::string Attack3name = "A really tasty snack";
+	std::string Attack3name = "Healing potion";
 	std::string Attack4name = "High Five"; //buff
 
 	//behöver override 

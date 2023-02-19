@@ -187,7 +187,7 @@ private:
 	//level 1 const variabler
 	const std::string name = "Brawler";
 	const int baseAttackPower = 20;
-	const int baseMagicPower = 2;
+	const int baseMagicPower = 3;
 	const int baseHP = 30;
 	const int baseLevel = 1;
 	const int baseXP = 0;
@@ -200,14 +200,13 @@ private:
 
 	int level = 1;
 	int XP = 0;
-	int levelUpRequirement = 15;
+	int levelUpRequirement = 12;
 
 	bool alive = true;
 
 	const std::string attack1Name = "Knuckle Sandwich";
 	const std::string attack2Name = "Card trick";
 	const std::string attack3Name = "Headbutt";
-	const std::string attack4Name = "High five (damage buff)";
 
 public:
 	//gets
@@ -254,10 +253,6 @@ public:
 	std::string getAttack3Name()
 	{
 		return attack3Name;
-	}
-	std::string getAttack4Name()
-	{
-		return attack4Name;
 	}
 
 	//funktion som ändrar värdet på alla stats till level 1 statsen
@@ -311,15 +306,13 @@ public:
 	{
 		return magicPower;
 	}
-	int Attack3(std::string healName)
+	int Attack3()
 	{
-		int healing = magicPower;
-		std::cout << name << " used " << attack3Name << " and healed " << healName << " " << healing << " hp\n";
-		return healing;
-	}
-	int Attack4()
-	{
-		return 999999;
+		int selfHarm = attackPower * level/1.5;
+		currentHP -= selfHarm;
+		int damage = attackPower * 2 * level;
+		std::cout << name << " used " << attack3Name << " and took " << selfHarm << " HP and dealt " << damage;
+		return damage;
 	}
 
 	void LevelUp()
@@ -347,7 +340,7 @@ private:
 	//level 1 const variabler
 	const std::string name = "Tank";
 	const int baseAttackPower = 3;
-	const int baseMagicPower = 10;
+	const int baseMagicPower = 1;
 	const int baseHP = 150;
 	const int baseLevel = 1;
 	const int baseXP = 0;
@@ -360,7 +353,7 @@ private:
 
 	int level = 1;
 	int XP = 0;
-	int levelUpRequirement = 10;
+	int levelUpRequirement = 17;
 
 	bool alive = true;
 

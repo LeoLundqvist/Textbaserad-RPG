@@ -14,6 +14,7 @@ int input_Who = 0;
 
 bool mageTurn = true;
 bool brawlerTurn = true;
+bool tankTurn = true;
 
 //char array av varje space på mappen
 //currentMap är den med spelarens position på
@@ -247,7 +248,6 @@ void Game::BattleSetup()
 		enemy2.setAlive(false);
 		enemy2.setName("Noone");
 	}
-
 	//om det är 3 fiender
 	if (enemyCount == 3)
 	{
@@ -261,8 +261,6 @@ void Game::BattleSetup()
 		enemy3.setAlive(false);
 		enemy3.setName("Noone");
 	}
-
-	std::cout << whatEnemy1 << " " << whatEnemy2 << " " << whatEnemy3 << "\n";
 
 	//enemy1 får värden
 	switch (whatEnemy1)
@@ -462,7 +460,6 @@ void Game::MageTurn()
 	std::cin >> input_Combat;
 	switch (input_Combat)
 	{
-		//om du väljer move
 	case 1:
 		std::cout << "1. " << mage.getAttack1Name() << "\n";
 		std::cout << "2. " << mage.getAttack2Name() << "\n";
@@ -507,9 +504,34 @@ void Game::MageTurn()
 
 			break;
 		case 2:
-			std::cout << mage.getName() << " used " << mage.getAttack2Name() << " and dealt " << mage.Attack2() << " to " << enemy1.getName() << "\n";
-			enemy1.takeDamage(mage.Attack2());
-			mageTurn = false;
+			std::cout << "Which enemy would you like to attack?\n";
+			std::cout << "1. " << enemy1.getName() << "\n";
+			std::cout << "2. " << enemy2.getName() << "\n";
+			std::cout << "3. " << enemy3.getName() << "\n";
+			std::cin >> input_Who;
+			//vem man attackerar
+			if (input_Who == 1 && enemy1.getExists() == true)
+			{
+				std::cout << mage.getName() << " used " << mage.getAttack2Name() << " and dealt " << mage.Attack2() << " to " << enemy1.getName() << "\n";
+				enemy1.takeDamage(mage.Attack2());
+				mageTurn = false;
+			}
+			else if (input_Who == 2 && enemy2.getExists() == true)
+			{
+				std::cout << mage.getName() << " used " << mage.getAttack2Name() << " and dealt " << mage.Attack2() << " to " << enemy2.getName() << "\n";
+				enemy2.takeDamage(mage.Attack2());
+				mageTurn = false;
+			}
+			else if (input_Who == 3 && enemy3.getExists() == true)
+			{
+				std::cout << mage.getName() << " used " << mage.getAttack2Name() << " and dealt " << mage.Attack2() << " to " << enemy3.getName() << "\n";
+				enemy3.takeDamage(mage.Attack2());
+				mageTurn = false;
+			}
+			else
+			{
+				std::cout << "There's no enemy there...\n";
+			}
 
 			break;
 		case 3:
@@ -571,53 +593,107 @@ void Game::BrawlerTurn()
 		std::cout << "1. " << brawler.getAttack1Name() << "\n";
 		std::cout << "2. " << brawler.getAttack2Name() << "\n";
 		std::cout << "3. " << brawler.getAttack3Name() << "\n";
-		std::cout << "4. " << brawler.getAttack4Name() << "\n";
 		std::cout << "Type any other number to go back\n";
 
 		std::cin >> input_Move;
 
 		switch (input_Move)
 		{
+		//attack 1
 		case 1:
-			//skriver ut text och sen attackerar fienden
-			std::cout << brawler.getName() << " used " << brawler.getAttack1Name() << " and dealt " << brawler.Attack1() << " to " << enemy1.getName() << "\n";
-			enemy1.takeDamage(brawler.Attack1());
-			brawlerTurn = false;
-
-			break;
-		case 2:
-			std::cout << brawler.getName() << " used " << brawler.getAttack2Name() << " and dealt " << brawler.Attack2() << " to " << enemy1.getName() << "\n";
-			enemy1.takeDamage(brawler.Attack2());
-			brawlerTurn = false;
-
-			break;
-		case 3:
-			std::cout << "Which party member would you like to heal?\n";
-			std::cout << "1. Mage\n";
-			std::cout << "2. Brawler\n";
-			std::cout << "3. Tank\n";
-			std::cout << "Type any other number to go back\n";
+			std::cout << "Which enemy would you like to attack?\n";
+			std::cout << "1. " << enemy1.getName() << "\n";
+			std::cout << "2. " << enemy2.getName() << "\n";
+			std::cout << "3. " << enemy3.getName() << "\n";
 			std::cin >> input_Who;
-			if (input_Who == 1)
+			if (input_Who == 1 && enemy1.getExists() == true)
 			{
 				//heal funktionen behöver en int och int funktionen behöver en string
-				brawler.heal(brawler.Attack3(brawler.getName()));
+				std::cout << brawler.getName() << " used " << brawler.getAttack1Name() << " and dealt " << brawler.Attack1() << " to " << enemy1.getName() << "\n";
+				enemy1.takeDamage(brawler.Attack1());
 				brawlerTurn = false;
 			}
-			else if (input_Who == 2)
+			else if (input_Who == 2 && enemy2.getExists() == true)
 			{
+				std::cout << brawler.getName() << " used " << brawler.getAttack1Name() << " and dealt " << brawler.Attack1() << " to " << enemy2.getName() << "\n";
+				enemy2.takeDamage(brawler.Attack1());
 				brawlerTurn = false;
 			}
-			else if (input_Who == 3)
+			else if (input_Who == 3 && enemy3.getExists() == true)
 			{
+				std::cout << brawler.getName() << " used " << brawler.getAttack1Name() << " and dealt " << brawler.Attack1() << " to " << enemy3.getName() << "\n";
+				enemy3.takeDamage(brawler.Attack1());
 				brawlerTurn = false;
+				mageTurn = false;
 			}
-			break;
-		case 4:
-			std::cout << brawler.getName() << " used " << brawler.getAttack4Name() << " and dealt " << brawler.Attack4() << " to " << enemy1.getName() << "\n";
-			enemy1.takeDamage(brawler.Attack4());
-			brawlerTurn = false;
+			else
+			{
+				std::cout << "There's no enemy there...\n";
+			}
 
+			break;
+		//attack 2
+		case 2:
+			std::cout << "Which enemy would you like to attack?\n";
+			std::cout << "1. " << enemy1.getName() << "\n";
+			std::cout << "2. " << enemy2.getName() << "\n";
+			std::cout << "3. " << enemy3.getName() << "\n";
+			std::cin >> input_Who;
+			if (input_Who == 1 && enemy1.getExists() == true)
+			{
+				//heal funktionen behöver en int och int funktionen behöver en string
+				std::cout << brawler.getName() << " used " << brawler.getAttack2Name() << " and dealt " << brawler.Attack2() << " to " << enemy1.getName() << "\n";
+				enemy1.takeDamage(brawler.Attack2());
+				brawlerTurn = false;
+			}
+			else if (input_Who == 2 && enemy2.getExists() == true)
+			{
+				std::cout << brawler.getName() << " used " << brawler.getAttack2Name() << " and dealt " << brawler.Attack2() << " to " << enemy2.getName() << "\n";
+				enemy2.takeDamage(brawler.Attack2());
+				brawlerTurn = false;
+			}
+			else if (input_Who == 3 && enemy3.getExists() == true)
+			{
+				std::cout << brawler.getName() << " used " << brawler.getAttack2Name() << " and dealt " << brawler.Attack2() << " to " << enemy3.getName() << "\n";
+				enemy3.takeDamage(brawler.Attack2());
+				brawlerTurn = false;
+			}
+			else
+			{
+				std::cout << "There's no enemy there...\n";
+			}
+
+			break;
+		//attack 3
+		case 3:
+			std::cout << "Which enemy would you like to attack?\n";
+			std::cout << "1. " << enemy1.getName() << "\n";
+			std::cout << "2. " << enemy2.getName() << "\n";
+			std::cout << "3. " << enemy3.getName() << "\n";
+			std::cin >> input_Who;
+			if (input_Who == 1 && enemy1.getExists() == true)
+			{
+				//heal funktionen behöver en int och int funktionen behöver en string
+				enemy1.takeDamage(brawler.Attack3());
+				std::cout << " damage to " << enemy1.getName() << "\n";
+				brawlerTurn = false;
+			}
+			else if (input_Who == 2 && enemy2.getExists() == true)
+			{
+				enemy2.takeDamage(brawler.Attack3());
+				std::cout << " damage to " << enemy2.getName() << "\n";
+				brawlerTurn = false;
+			}
+			else if (input_Who == 3 && enemy3.getExists() == true)
+			{
+				enemy3.takeDamage(brawler.Attack3());
+				std::cout << " damage to " << enemy3.getName() << "\n";
+				brawlerTurn = false;
+			}
+			else
+			{
+				std::cout << "There's no enemy there...\n";
+			}
 			break;
 		}
 
