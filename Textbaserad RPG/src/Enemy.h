@@ -11,14 +11,13 @@ private:
 	int magicPower = 2;
 	int currentHP = maxHP;
 	int XP = 5;
+	int money = 5;
 
 	bool exists = true;
 	bool alive = true;
 
-	std::string Attack1name = "Hit";
-	std::string Attack2name = "Telekenisis";
-	std::string Attack3name = "Healing potion";
-	std::string Attack4name = "High Five"; //buff
+	std::string attack1Name = "Pauwnch";
+	std::string attack2Name = "Telekenisis";
 
 	//behöver override 
 
@@ -46,6 +45,10 @@ public:
 	int getXP()
 	{
 		return XP;
+	}
+	int getMoney()
+	{
+		return money;
 	}
 
 	void setName(std::string newName)
@@ -91,5 +94,17 @@ public:
 	{
 		return attackPower;
 	}
+	int attack2()
+	{
+		return magicPower;
+	}
 
+	std::string getAttack1Name()
+	{
+		return attack1Name;
+	}
+	std::string getAttack2Name()
+	{
+		return attack2Name;
+	}
 };

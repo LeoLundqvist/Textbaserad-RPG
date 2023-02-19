@@ -69,6 +69,10 @@ public:
 	{
 		return currentHP;
 	}
+	int getLevel()
+	{
+		return level;
+	}
 	int getXP()
 	{
 		return XP;
@@ -126,6 +130,7 @@ public:
 		currentHP-=damage;
 		if(currentHP <= 0)
 		{
+			currentHP = 0;
 			alive = false;
 		}
 
@@ -147,11 +152,11 @@ public:
 	}
 	int Attack2()
 	{
-		return magicPower;
+		return magicPower*2;
 	}
 	int Attack3(std::string healName)
 	{
-		int healing = magicPower*1.5;
+		int healing = magicPower*2;
 		std::cout << name << " used " << attack4Name << " and healed " << healName << " " << healing << " hp\n";
 		return healing;
 	}
@@ -228,6 +233,10 @@ public:
 	{
 		return currentHP;
 	}
+	int getLevel()
+	{
+		return level;
+	}
 	int getXP()
 	{
 		return XP;
@@ -281,6 +290,7 @@ public:
 		currentHP -= damage;
 		if (currentHP <= 0)
 		{
+			currentHP = 0;
 			alive = false;
 		}
 
@@ -306,10 +316,14 @@ public:
 	}
 	int Attack3()
 	{
-		int selfHarm = attackPower * level/1.5;
+		int selfHarm = attackPower;
 		currentHP -= selfHarm;
-		int damage = attackPower * 2 * level;
+		int damage = attackPower * 3;
 		std::cout << name << " used " << attack3Name << " and took " << selfHarm << " HP and dealt " << damage;
+		if (currentHP < 0)
+		{
+			currentHP = 0;
+		}
 		return damage;
 	}
 
@@ -354,11 +368,11 @@ private:
 	int levelUpRequirement = 17;
 
 	bool alive = true;
+	bool protecting = false;
 
-	const std::string attack1Name = "Staff slap";
-	const std::string attack2Name = "Explosion";
-	const std::string attack3Name = "Heal";
-	const std::string attack4Name = "Insta Kill(for playtesting)";
+	const std::string attack1Name = "Weak push";
+	const std::string attack2Name = "Finger Gun";
+	const std::string attack3Name = "Distraction";
 
 public:
 	//gets
@@ -382,6 +396,10 @@ public:
 	{
 		return currentHP;
 	}
+	int getLevel()
+	{
+		return level;
+	}
 	int getXP()
 	{
 		return XP;
@@ -394,6 +412,10 @@ public:
 	{
 		return alive;
 	}
+	bool getProtecting()
+	{
+		return protecting;
+	}
 	std::string getAttack1Name()
 	{
 		return attack1Name;
@@ -405,10 +427,6 @@ public:
 	std::string getAttack3Name()
 	{
 		return attack3Name;
-	}
-	std::string getAttack4Name()
-	{
-		return attack4Name;
 	}
 
 	//funktion som ändrar värdet på alla stats till level 1 statsen
@@ -439,6 +457,7 @@ public:
 		currentHP -= damage;
 		if (currentHP <= 0)
 		{
+			currentHP = 0;
 			alive = false;
 		}
 
@@ -462,15 +481,9 @@ public:
 	{
 		return magicPower;
 	}
-	int Attack3(std::string healName)
+	void Attack3(bool Y_N)
 	{
-		int healing = magicPower * 1.5;
-		std::cout << name << " used " << attack4Name << " and healed " << healName << " " << healing << " hp\n";
-		return healing;
-	}
-	int Attack4()
-	{
-		return 999999;
+		protecting = Y_N;
 	}
 
 	void LevelUp()

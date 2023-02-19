@@ -1,6 +1,7 @@
 #pragma once
-class Backpack
 #include <iostream>
+
+class Backpack
 {	
 private:
 	const int basemoney = 0;
@@ -32,6 +33,17 @@ public:
 		potions = basepotions;
 		revives = baseRevives;
 	}
+
+	void recivePotions(int amount)
+	{
+		potions += amount;
+	}
+
+	void reciveRevives(int amount)
+	{
+		revives += amount;
+	}
+
 	void useRevive()
 	{
 		revives--;
@@ -46,6 +58,7 @@ public:
 	}
 	void rewardMoney(int amount)
 	{
+		std::cout << "You got " << amount << " moneys!\n";
 		money += amount;
 	}
 };

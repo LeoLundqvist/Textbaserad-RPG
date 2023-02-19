@@ -17,4 +17,8 @@ public:
 	void StartSetup();
 	void BattleWon();
 	void HPBar();
+	void Treasure();
+	void Shop();
+	void UseItems();
+
 };
