@@ -222,11 +222,10 @@ void Game::Map()
 void Game::BattleSetup()
 {
 
-	srand(time(NULL));
+	srand((unsigned)time(0));
 	int enemyCount = rand() % 3 + 1;
-	enemyCount = 2;
 	
-	srand(time(NULL));
+	srand((unsigned)time(0) + 1);
 	int whatEnemy1 = rand() % 4 + 1;
 
 	int whatEnemy2 = 0;
@@ -239,7 +238,7 @@ void Game::BattleSetup()
 	if (enemyCount > 1)
 	{
 		enemy2.setExists(true);
-		srand(time(NULL));
+		srand((unsigned)time(0) + 2);
 		whatEnemy2 = rand() % 4 + 1;
 	}
 	else
@@ -253,7 +252,7 @@ void Game::BattleSetup()
 	if (enemyCount == 3)
 	{
 		enemy3.setExists(true);
-		srand(time(NULL));
+		srand((unsigned)time(0) + 3);
 		whatEnemy3 = rand() % 4 + 1;
 	}
 	else
@@ -262,6 +261,8 @@ void Game::BattleSetup()
 		enemy3.setAlive(false);
 		enemy3.setName("Noone");
 	}
+
+	std::cout << whatEnemy1 << " " << whatEnemy2 << " " << whatEnemy3 << "\n";
 
 	//enemy1 får värden
 	switch (whatEnemy1)
