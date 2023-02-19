@@ -15,4 +15,6 @@ public:
 	void BattleSetup();
 	void Map();
 	void StartSetup();
+	void BattleWon();
+	void HPBar();
 };

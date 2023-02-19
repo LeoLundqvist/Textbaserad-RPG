@@ -80,7 +80,7 @@ public:
 	void takeDamage(int damage)
 	{
 		currentHP -= damage;
-		if (currentHP < 0)
+		if (currentHP <= 0)
 		{
 			currentHP = 0;
 			alive = false;
